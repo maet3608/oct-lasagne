@@ -15,8 +15,8 @@ cd oct-lasagne
 python setup.py install
 ```
  
-If the [Kivy](https://kivy.org) installation fails, install manually: 
-[installation instructions](https://kivy.org/#download)
+If the [Kivy](https://kivy.org) installation fails, install manually 
+following these [installation instructions](https://kivy.org/#download).
    
 
 
@@ -77,7 +77,7 @@ annotation will automatically be saved (provided ``Auto ON`` is set)
 
 ## Data
 
-The data folder must contain OCT volumes as 3D numpy arrays (``dtype='uint8``), 
+The data folder must contain OCT volumes as 3D numpy arrays (``dtype='uint8'``), 
 where the first axis is the B-scan, followed by height and width of the B-scan.
 
 
