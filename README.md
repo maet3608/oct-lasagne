@@ -3,7 +3,7 @@
 Tool for the surface annotation of retinal Optical Coherence Tomography (OCT) 
 volumes.
 
-![UI](https://github.ibm.com/aur-mma/gazer-oct/blob/master/ui.png)
+![UI](https://github.com/maet3608/oct-lasagne/blob/master/ui.png)
 
 
 
