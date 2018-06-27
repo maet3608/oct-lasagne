@@ -78,7 +78,8 @@ annotation will automatically be saved (provided ``Auto ON`` is set)
 ## Data
 
 The data folder must contain OCT volumes as 3D numpy arrays (``dtype='uint8'``), 
-where the first axis is the B-scan, followed by height and width of the B-scan.
+where the first axis is the B-scan, followed by rows(depth) and cols of the 
+B-scan.
 
 
 ## Annotation
