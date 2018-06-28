@@ -16,7 +16,7 @@ OCTEXT = '.npy'
 OCTID = 'oct_id'
 #LAYERS = ['l:ILM', 'l:RNFL', 'l:GCL', 'l:IPL', 'l:INL', 'l:OPL',
 #          'l:ONL', 'l:PR', 'l:RPE', 'l:BM']
-LAYERS = ['l:ILM', 'l:RNFL', 'l:GCL+IPL', 'l:BM']
+LAYERS = ['l:ILM', 'l:RNFL', 'l:GCL+IPL', 'l:INL', 'l:BM']
 
 
 # Size of application main window
