@@ -24,11 +24,11 @@ following these [installation instructions](https://kivy.org/#download).
 
 ```
 USAGE:
-python -m octlasange.app <datadir>
-python octlasange.app.py <datadir>
+python app.py <datadir>
 
 EXAMPLE:
-python -m octlasange.app  mydata/octvolumes
+cd oct-lasange/octlasange
+python app.py  ../data
 ```
 
 
