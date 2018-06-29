@@ -2,7 +2,7 @@ import os
 
 import glob
 import shutil
-import gazeroct
+import octlasagne
 
 from setuptools import setup, find_packages, Command
 
@@ -26,9 +26,9 @@ class CleanCommand(Command):
 
 setup(
     name='gazeroct',
-    version=gazeroct.__version__,
-    url='https://github.ibm.com/aur-mma/gazer-oct',
-    license='IBM',
+    version=octlasagne.__version__,
+    url='https://maet3608.github.io/oct-lasagne',
+    license='Apache Software License (http://www.apache.org/licenses/LICENSE-2.0)',
     author='Stefan Maetschke',
     author_email='stefanrm@au1.ibm.com',
     description='Annotation tool for OCT images',
