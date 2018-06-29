@@ -25,7 +25,7 @@ class CleanCommand(Command):
 
 
 setup(
-    name='gazeroct',
+    name='octlasagne',
     version=octlasagne.__version__,
     url='https://maet3608.github.io/oct-lasagne',
     license='Apache Software License (http://www.apache.org/licenses/LICENSE-2.0)',
