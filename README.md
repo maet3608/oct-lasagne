@@ -29,8 +29,8 @@ python -m pip install kivy
    
 However, installation of the wheel worked. Download suitable wheel from
 [here](https://kivy.org/downloads/appveyor/kivy/), e.g.
-`Kivy-1.10.1-cp36-cp36m-win_amd64.whl` for Windows 64bit and Python 3.6.
-Install via 
+`Kivy-1.10.1-cp36-cp36m-win_amd64.whl` for Windows 64bit and Python 3.6,
+and install with 
 
 ```
 python -m pip install Kivy-1.10.1-cp36-cp36m-win_amd64.whl
