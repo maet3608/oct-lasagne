@@ -17,7 +17,24 @@ python setup.py install
  
 If the [Kivy](https://kivy.org) installation fails, install manually 
 following these [installation instructions](https://kivy.org/#download).
+
+### Windows
+
+The following instructions for installing Kivy did NOT work for me:
+
+```
+python -m pip install docutils pygments pypiwin32 kivy.deps.sdl2 kivy.deps.glew
+python -m pip install kivy
+```
    
+However, installation of the wheel worked. Download suitable wheel from
+[here](https://kivy.org/downloads/appveyor/kivy/), e.g.
+`Kivy-1.10.1-cp36-cp36m-win_amd64.whl` for Windows 64bit and Python 3.6.
+Install via 
+
+```
+python -m pip install Kivy-1.10.1-cp36-cp36m-win_amd64.whl
+```   
 
 
 ## Usage
