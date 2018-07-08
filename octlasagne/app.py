@@ -34,8 +34,6 @@ def valid_args():
 
 
 try:
-
-
     if valid_args():
         application = octlasagne.OCTLasagneApp(sys.argv[1])
         application.run()
