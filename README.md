@@ -69,6 +69,10 @@ A short description of the user interface.
 - Move point: CTRL + left mouse click
 - Delete point: SHIFT + left mouse click
 
+### Timer
+- start/stop timer by pressing ``s``
+- reset timer by pressing ``r``
+
 ### Exiting
 
 Exit a dialog or the application by pressing the ESC button. The layer 
