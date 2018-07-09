@@ -8,7 +8,7 @@ from __future__ import print_function, absolute_import
 
 from kivy.config import Config
 
-Config.set('kivy', 'log_level', 'error')
+# Config.set('kivy', 'log_level', 'error')
 Config.set('input', 'mouse', 'mouse,disable_multitouch')
 
 import numpy as np
@@ -17,6 +17,7 @@ import os.path as osp
 
 from __init__ import __version__
 from glob import glob
+from datetime import timedelta
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.widget import Widget
@@ -28,6 +29,7 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 
+from timer import AnnotationTimer
 from octpanel import OctPanel
 from helptext import HELPTEXT
 from common import load_dataframe, save_dataframe, save_as_pickle
@@ -56,6 +58,9 @@ class OCTLasagneApp(App):
         self.scanidx = 0  # index of B scan in OCT currently displayed
         self.dfindex = None  # Pandas row indices currently selected
         self.layername = None  # Layer currently selected for editing
+
+        self.annotimer = AnnotationTimer(self.update_time_display,
+                                         self.update_time_anno)
 
     def build(self):
         """Build the window and its contents"""
@@ -130,10 +135,12 @@ class OCTLasagneApp(App):
         buttonlyt.add_widget(helpbtn)
 
         self.octnamelbl = Label(font_size=FNTSIZE)
+        self.timerlbl = Label(pos=(dp(0), dp(10)), font_size=FNTSIZE)
 
         root = Widget()
         root.add_widget(self.octpanel)
         root.add_widget(self.octnamelbl)
+        root.add_widget(self.timerlbl)
         root.add_widget(buttonlyt)
 
         self.prepare_annotation()
@@ -148,7 +155,8 @@ class OCTLasagneApp(App):
         octpaths = glob(osp.join(self.datadir, '*' + OCTEXT))
         octids = [osp.splitext(osp.basename(p))[0] for p in octpaths]
         df = pd.DataFrame(octids, columns=[OCTID])
-        for name in LAYERS: # add empty layer columns
+        df[DURATION] = None  # add empty duration column
+        for name in LAYERS:  # add empty layer columns
             df[name] = None
         save_as_pickle(df, self.annopath)
 
@@ -198,12 +206,40 @@ class OCTLasagneApp(App):
         """Show help button pressed"""
         text = Label(text=HELPTEXT, font_size=FNTSMALLSIZE)
         popup = Popup(title='Help', content=text,
-                      size_hint=(None, None), size=POPLARGESIZE)
+                      size_hint=(None, None), size=POPHELPSIZE)
         popup.open()
 
     def update_status(self):
-        """Update status text that displayes OCT name in main window"""
+        """Update status text: OCT name and timer"""
         self.octnamelbl.text = '{}:{}'.format(self.oct_id, self.scanidx + 1)
+        self.update_timer_status()
+
+    def update_timer_status(self):
+        durations = self.get_durations()
+        if durations is None:
+            self.timerlbl.text = ''
+            self.annotimer.reset_timing(do_callback=False, seconds=0)
+        else:
+            seconds = durations[self.scanidx]
+            self.annotimer.reset_timing(do_callback=True, seconds=seconds)
+
+    def update_time_display(self, seconds):
+        """Update timer display with current time delta"""
+        # set label to time difference in format HH:MM:SS
+        tdelta = timedelta(seconds=seconds)
+        self.timerlbl.text = str(tdelta).split('.')[0]
+
+    def update_time_anno(self, seconds):
+        """Update time annotation with duration in float seconds"""
+        durations = self.get_durations()
+        if durations is None:
+            durations = [0.0 for _ in range(self.oct.shape[0])]
+        durations[self.scanidx] = seconds
+        self.df.at[self.dfindex[self.octidx], DURATION] = durations
+
+    def get_durations(self):
+        """Return annotation durations for current oct"""
+        return self.get_cellvalue(self.octidx, DURATION)
 
     def get_cellvalue(self, octidx, column):
         """Return cell value from pandas table"""
@@ -347,7 +383,7 @@ class OCTLasagneApp(App):
         print('loading annotation ...', self.annopath, end='...')
         self.df = load_dataframe(self.annopath)
         print('done.')
-        #self.df.info()
+        # self.df.info()
         # print(self.df.head())
         self.filter_table(query='')
         self.update_layer_btns()
@@ -369,6 +405,7 @@ class OCTLasagneApp(App):
     def on_next_oct(self, obj):
         """Next OCT button pressed"""
         n = len(self.dfindex) - 1
+        self.annotimer.stop_timing()
         self.octidx += 0 if self.octidx >= n else 1
         self.nextoctbtn.disabled = self.octidx >= n
         self.prevoctbtn.disabled = False
@@ -377,6 +414,7 @@ class OCTLasagneApp(App):
 
     def on_prev_oct(self, obj):
         """Previous OCT button pressed"""
+        self.annotimer.stop_timing()
         self.octidx -= 0 if self.octidx <= 0 else 1
         self.prevoctbtn.disabled = self.octidx <= 0
         self.nextoctbtn.disabled = False
@@ -385,6 +423,7 @@ class OCTLasagneApp(App):
 
     def on_prev_scan(self, obj):
         """Previous Scan button pressed"""
+        self.annotimer.stop_timing()
         self.scanidx -= 0 if self.scanidx <= 0 else 1
         self.prevscanbtn.disabled = self.scanidx <= 0
         self.nextscanbtn.disabled = False
@@ -393,6 +432,7 @@ class OCTLasagneApp(App):
     def on_next_scan(self, obj):
         """Next Scan button pressed"""
         n = self.oct.shape[0] - 1
+        self.annotimer.stop_timing()
         self.scanidx += 0 if self.scanidx >= n else 1
         self.nextscanbtn.disabled = self.scanidx >= n
         self.prevscanbtn.disabled = False
@@ -400,6 +440,7 @@ class OCTLasagneApp(App):
 
     def on_stop(self):
         """Stop application"""
+        self.annotimer.event.set()  # stop timer
         if self.autosave:
             self.save_annotation()
         self.save_backup()
@@ -436,6 +477,10 @@ class OCTLasagneApp(App):
             self.isvisblebtn.trigger_action()
         elif scancode == KEYLA:
             self.viewallbtn.trigger_action()
+        elif scancode == KEYLS:
+            self.annotimer.toggle_timing()
+        elif scancode == KEYLR:
+            self.annotimer.reset_timing()
         self.octpanel.editmode = EDITMODES.get(scancode, EDITOFF)
 
     def key_up(self, *wargs):

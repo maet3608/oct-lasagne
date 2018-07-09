@@ -14,6 +14,7 @@ OCTEXT = '.npy'
 
 # Columns
 OCTID = 'oct_id'
+DURATION = 'duration'
 #LAYERS = ['l:ILM', 'l:RNFL', 'l:GCL', 'l:IPL', 'l:INL', 'l:OPL',
 #          'l:ONL', 'l:PR', 'l:RPE', 'l:BM']
 LAYERS = ['l:ILM', 'l:RNFL', 'l:GCL+IPL', 'l:INL', 'l:BM']
@@ -33,7 +34,9 @@ KEYDOWN = 274
 KEYLEFT = 276
 KEYRIGHT = 275
 KEYLV = 118  # lowercase v
-KEYLA = 97  # lowercase a
+KEYLA = 97   # lowercase a
+KEYLS = 115  # lowercase s
+KEYLR = 114  # lowercase r
 
 # Button sizes
 BTNSIZE = (dp(100), dp(30))
@@ -45,6 +48,7 @@ BTNHEIGHT = dp(25)
 # Popup dialogs
 POPSMALLSIZE = (dp(400), dp(90))
 POPLARGESIZE = (dp(300), dp(400))
+POPHELPSIZE = (dp(300), dp(450))
 
 # Button labels
 BTNANNO = 'Annotation'

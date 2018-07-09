@@ -19,6 +19,10 @@ NAVIGATE
 Volumes = cursor up or down
 Scans = cursor left or right
 
+TIMER
+start/stop timer = press 's'
+reset timer = press 'r'
+
 EXIT
 Dialog = ESC or mouse click outside
 Application = ESC or close button
