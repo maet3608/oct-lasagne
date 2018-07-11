@@ -41,11 +41,15 @@ python -m pip install Kivy-1.10.1-cp36-cp36m-win_amd64.whl
 
 ```
 USAGE:
-python app.py <datadir>
+python octlasagne.py <datadir> [-s <scale_width>]
 
-EXAMPLE:
+EXAMPLE 1:
 cd oct-lasange/octlasange
-python app.py  ../data
+python octlasagne.py  ../data
+
+EXAMPLE 2:
+cd oct-lasange/octlasange
+python octlasagne.py  ../data -s 0.5
 ```
 
 

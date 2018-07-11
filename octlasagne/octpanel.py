@@ -21,6 +21,8 @@ class OctPanel(Scatter):
         self.app = app
         self.layeranno = []
         self.editmode = EDITOFF
+        self.sx = app.width_scale
+        self.apply_transform(Matrix().scale(self.sx, 1, 1))
 
     def display_scan(self):
         """Display the current scan and layer annotation if existing"""
@@ -47,7 +49,8 @@ class OctPanel(Scatter):
                     Line(points=points, width=1.0, joint='round')
                 Color(1., 0, 0)
                 for x, y in zip(points[0::2], points[1::2]):
-                    Ellipse(pos=(x - .5, y - .5), size=(1., 1.))
+                    pos, size = (x - .5/self.sx, y - .5), (1./self.sx, 1.)
+                    Ellipse(pos=pos, size=size)
 
     def flip_y(self, y):
         """Flip y value since image origin is upper left corner"""
