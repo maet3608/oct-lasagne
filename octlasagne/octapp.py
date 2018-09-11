@@ -217,7 +217,7 @@ class OCTLasagneApp(App):
 
     def update_timer_status(self):
         durations = self.get_durations()
-        if durations is None:
+        if durations is None or durations != durations:  # None or NaN
             self.timerlbl.text = ''
             self.annotimer.reset_timing(do_callback=False, seconds=0)
         else:
