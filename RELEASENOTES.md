@@ -4,6 +4,7 @@
 
 - configuration file added
 - locking of scans added
+- displayed scan index now zero based
 
 ## 1.0.4
 

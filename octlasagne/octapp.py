@@ -217,7 +217,7 @@ class OCTLasagneApp(App):
     def update_status(self):
         """Update status text: OCT name and timer"""
         is_locked = "LOCKED" if self.scanidx in self.locked_scans else ""
-        self.octnamelbl.text = '{}:{}'.format(self.oct_id, self.scanidx + 1)
+        self.octnamelbl.text = '{}:{}'.format(self.oct_id, self.scanidx)
         self.lockedlbl.text = 'LOCKED' if is_locked else ''
         self.update_timer_status()
 
