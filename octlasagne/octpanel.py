@@ -9,6 +9,8 @@ from kivy.uix.scatter import Scatter
 from kivy.graphics import Color, Ellipse, Line, Rectangle
 from kivy.graphics.texture import Texture
 from kivy.graphics.transformation import Matrix
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
 
 from constants import EDITOFF, EDITADD, EDITMOVE, EDITDEL
 
@@ -21,7 +23,7 @@ class OctPanel(Scatter):
         self.app = app
         self.layeranno = []
         self.editmode = EDITOFF
-        self.sx = app.width_scale
+        self.sx = app.ratio
         self.apply_transform(Matrix().scale(self.sx, 1, 1))
 
     def display_scan(self):
@@ -49,7 +51,7 @@ class OctPanel(Scatter):
                     Line(points=points, width=1.0, joint='round')
                 Color(1., 0, 0)
                 for x, y in zip(points[0::2], points[1::2]):
-                    pos, size = (x - .5/self.sx, y - .5), (1./self.sx, 1.)
+                    pos, size = (x - .5 / self.sx, y - .5), (1. / self.sx, 1.)
                     Ellipse(pos=pos, size=size)
 
     def flip_y(self, y):
@@ -80,8 +82,11 @@ class OctPanel(Scatter):
     def on_touch_down(self, touch):
         """Panning, zooming or editing of layer annotion"""
         super(OctPanel, self).on_touch_down(touch)
+        is_locked = self.app.scanidx in self.app.locked_scans
         if touch.is_mouse_scrolling and 'button' in touch.profile:
             self.zoom(touch.pos, touch.button == 'scrolldown')
+        elif is_locked and self.editmode != EDITOFF:
+            self.show_locked_msg()
         elif self.editmode != EDITOFF and self.app.layername:
             self.edit_layer(touch)
 
@@ -103,6 +108,12 @@ class OctPanel(Scatter):
             del self.layeranno[idx]
         self.layeranno.sort(key=lambda p: p[0])
         self.display_scan()
+
+    def show_locked_msg(self):
+        popup = Popup(title='Scan locked',
+                      content=Label(text='You cannot annotate this scan!'),
+                      size_hint=(None, None), size=(400, 100))
+        popup.open()
 
     def constrain_edge_points(self, idx, x, y):
         """Ensure that first and last point a borders of OCT image"""

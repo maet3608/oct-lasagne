@@ -41,14 +41,15 @@ class OCTLasagneApp(App):
     Main Kivy application window.
     """
 
-    def __init__(self, datadir, width_scale, **kwargs):
+    def __init__(self, config, **kwargs):
         super(OCTLasagneApp, self).__init__(**kwargs)
         self.title = 'oct-lasagne ' + __version__  # App window title
         self.icon = 'icon.ico'
-        self.datadir = datadir
-        self.width_scale = width_scale   # scaling factor for width of B scan
-        self.annopath = osp.join(datadir, ANNOFILE)
-        self.backuppath = osp.join(datadir, BACKUPFILE)
+        self.datadir = config['datadir']
+        self.ratio = config['ratio']
+        self.locked_scans = set(config['locked'])
+        self.annopath = osp.join(self.datadir, ANNOFILE)
+        self.backuppath = osp.join(self.datadir , BACKUPFILE)
         self.autosave = True  # save annotation on exit
         self.isvisible = True  # toggle visibility of layer annotation
         self.viewall = False  # toggle visibility of all layers
@@ -136,11 +137,13 @@ class OCTLasagneApp(App):
         buttonlyt.add_widget(helpbtn)
 
         self.octnamelbl = Label(font_size=FNTSIZE)
+        self.lockedlbl = Label(font_size=FNTSIZE, color=[1,0,0,1])
         self.timerlbl = Label(pos=(dp(0), dp(10)), font_size=FNTSIZE)
 
         root = Widget()
         root.add_widget(self.octpanel)
         root.add_widget(self.octnamelbl)
+        root.add_widget(self.lockedlbl)
         root.add_widget(self.timerlbl)
         root.add_widget(buttonlyt)
 
@@ -165,6 +168,7 @@ class OCTLasagneApp(App):
         """Window has been resized. Adjust label and button positions"""
         w, h = args
         self.octnamelbl.pos = (w / 2, h - 3 * BTNHEIGHT)
+        self.lockedlbl.pos = (w / 2, h - 5 * BTNHEIGHT)
 
     def show_first_oct(self):
         """Display first scan of first OCT"""
@@ -212,7 +216,9 @@ class OCTLasagneApp(App):
 
     def update_status(self):
         """Update status text: OCT name and timer"""
+        is_locked = "LOCKED" if self.scanidx in self.locked_scans else ""
         self.octnamelbl.text = '{}:{}'.format(self.oct_id, self.scanidx + 1)
+        self.lockedlbl.text = 'LOCKED' if is_locked else ''
         self.update_timer_status()
 
     def update_timer_status(self):

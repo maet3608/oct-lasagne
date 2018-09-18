@@ -41,15 +41,30 @@ python -m pip install Kivy-1.10.1-cp36-cp36m-win_amd64.whl
 
 ```
 USAGE:
-python octlasagne.py <datadir> [-s <scale_width>]
+python octlasagne.py <configfile> 
 
 EXAMPLE 1:
 cd oct-lasange/octlasange
-python octlasagne.py  ../data
+python octlasagne.py  config.json
+```
 
-EXAMPLE 2:
-cd oct-lasange/octlasange
-python octlasagne.py  ../data -s 0.5
+## Configuration file
+
+The configuration file is a file in JSON format that specifies application 
+parameters such as
+
+- the data directory (datadir) that contains the OCT volumes to annotate
+- a scaling factor (ratio) for the width of the displayed scans
+- a list of scans that are locked for annotation. 
+ 
+Here an example of a configuration file:
+
+```JSON
+{
+  "datadir": "data/oct_volumes",
+  "ratio" : 4.0,
+  "locked" : [0, 5, 10]
+}
 ```
 
 

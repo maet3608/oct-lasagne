@@ -1,5 +1,14 @@
 # Release notes
 
+## 1.0.5
+
+- configuration file added
+- locking of scans added
+
+## 1.0.4
+
+- fix: loading of annotation with no duration
+
 ## 1.0.3
 - cmdline argument to scale B scan width added
 - app.py renamed to octlasagne.py

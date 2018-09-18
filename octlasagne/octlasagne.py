@@ -3,6 +3,7 @@ Visualization and annotation tool for OCT images.
 """
 
 import sys
+import json
 import traceback
 import octapp
 
@@ -11,40 +12,34 @@ import os.path as osp
 
 def print_usage():
     print('USAGE:')
-    print('python octlasagne.py <datadir> [-s <width_scale>]')
+    print('python octlasagne.py <config_file')
     print()
-    print('EXAMPLES:')
-    print('python octlasagne.py  mydata/octvolumes')
-    print('python octlasagne.py  mydata/octvolumes -s 0.5')
+    print('EXAMPLE:')
+    print('python octlasagne.py  config.json')
 
 
 def parse_args(argv):
-    invalid = (None, None)
-
-    if len(argv) not in {2, 4}:
-        print('ERROR: Invalid arguments!')
+    if len(argv) != 2:
+        print('ERROR: Missing configuration file argument!')
         print_usage()
-        return invalid
+        return None
 
-    width_scale = float(argv[3]) if len(argv) == 4 else 1.0
-    if len(argv) == 4 and argv[2] != '-s':
-        print('ERROR: Expected parameter -s')
-        print_usage()
-        return invalid
+    configpath = argv[1]
+    if not osp.exists(configpath):
+        print('ERROR: Configuration files does not exist: ' + configpath)
+        return None
 
-    datadir = argv[1]
-    if not osp.isdir(datadir):
-        print('ERROR: Data folder does not exist: ' + datadir)
-        return invalid
+    with open(configpath) as f:
+        config = json.load(f)
 
-    return datadir, width_scale
+    return config
 
 
 if __name__ == '__main__':
     try:
-        datadir, width_scale = parse_args(sys.argv)
-        if datadir and width_scale:
-            application = octapp.OCTLasagneApp(datadir, width_scale)
+        config = parse_args(sys.argv)
+        if config:
+            application = octapp.OCTLasagneApp(config)
             application.run()
     except:
         application.save_backup()  # Save annotation even when we are crashing
