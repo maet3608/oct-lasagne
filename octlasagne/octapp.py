@@ -49,7 +49,7 @@ class OCTLasagneApp(App):
         self.ratio = config['ratio']
         self.locked_scans = set(config['locked'])
         self.annopath = osp.join(self.datadir, ANNOFILE)
-        self.backuppath = osp.join(self.datadir , BACKUPFILE)
+        self.backuppath = osp.join(self.datadir, BACKUPFILE)
         self.autosave = True  # save annotation on exit
         self.isvisible = True  # toggle visibility of layer annotation
         self.viewall = False  # toggle visibility of all layers
@@ -137,7 +137,7 @@ class OCTLasagneApp(App):
         buttonlyt.add_widget(helpbtn)
 
         self.octnamelbl = Label(font_size=FNTSIZE)
-        self.lockedlbl = Label(font_size=FNTSIZE, color=[1,0,0,1])
+        self.lockedlbl = Label(font_size=FNTSIZE, color=[1, 0, 0, 1])
         self.timerlbl = Label(pos=(dp(0), dp(10)), font_size=FNTSIZE)
 
         root = Widget()
@@ -291,7 +291,11 @@ class OCTLasagneApp(App):
         self.scanidx = 0
         self.prevscanbtn.disabled = True
         octpath = osp.join(self.datadir, self.oct_id + OCTEXT)
-        return np.load(octpath)
+        cube = np.load(octpath)
+        dtype = cube.dtype
+        assert dtype == 'uint8', ('Expect cube data type to be uint8 but got ' +
+                                  str(dtype))
+        return cube
 
     def display_oct_scan(self):
         """Displays the current OCT scan"""

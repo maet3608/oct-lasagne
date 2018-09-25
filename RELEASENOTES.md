@@ -1,5 +1,9 @@
 # Release notes
 
+## 1.0.6
+
+- check dtype == 'uint8' when loading cube 
+
 ## 1.0.5
 
 - configuration file added
