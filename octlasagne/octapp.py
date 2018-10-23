@@ -293,8 +293,11 @@ class OCTLasagneApp(App):
         octpath = osp.join(self.datadir, self.oct_id + OCTEXT)
         cube = np.load(octpath)
         dtype = cube.dtype
-        assert dtype == 'uint8', ('Expect cube data type to be uint8 but got ' +
+        dim = len(cube.shape)
+        assert dtype == 'uint8', ('Expect OCT data type to be uint8 but got ' +
                                   str(dtype))
+        assert dim == 3, ('Expect OCT data to have three dimensions but got ' +
+                          str(cube.shape))
         return cube
 
     def display_oct_scan(self):
@@ -308,7 +311,7 @@ class OCTLasagneApp(App):
         if btn.text == BTNSAVE:
             self.save_annotation()
         elif btn.text == BTNRECOVER:
-            self.recover()
+            self.load_backup()
         elif btn.text == BTNFILTER:
             self.filter_data_dialog()
         elif btn.text == BTNADDLAYER:
@@ -381,13 +384,33 @@ class OCTLasagneApp(App):
         self.octidx = -1
         self.scanidx = 0
 
-    def recover(self):
-        print('loading backup... ', self.backuppath, end='...')
-        self.df = load_dataframe(self.backuppath)
-        print('done.')
-        self.filter_table(query='')
-        self.update_layer_btns()
-        self.show_first_oct()
+    def load_backup(self):
+        def cancel(_):
+            popup.dismiss()
+
+        def ok(_):
+            print('loading backup... ', self.backuppath, end='...')
+            self.df = load_dataframe(self.backuppath)
+            print('done.')
+            self.filter_table(query='')
+            self.update_layer_btns()
+            self.show_first_oct()
+            popup.dismiss()
+
+        btnok = Button(text='Yes', size=BTNSIZE, size_hint=BTNHINT,
+                       font_size=FNTSIZE)
+        btcancel = Button(text='Cancel', size=BTNSIZE, size_hint=BTNHINT,
+                          font_size=FNTSIZE)
+        btnok.bind(on_release=ok)
+        btcancel.bind(on_release=cancel)
+        buttonlyt = BoxLayout(orientation='horizontal')
+        buttonlyt.add_widget(btnok)
+        buttonlyt.add_widget(btcancel)
+        popup = Popup(title='Load backup: are you sure?',
+                      content=buttonlyt,
+                      size_hint=(None, None),
+                      size=(dp(230), dp(110)))
+        popup.open()
 
     def load_annotation(self):
         """Load pandas table with annotation data"""

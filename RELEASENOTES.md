@@ -1,5 +1,9 @@
 # Release notes
 
+## 1.0.7
+
+- confirmation dialog added when loading backup
+
 ## 1.0.6
 
 - check dtype == 'uint8' when loading cube 
