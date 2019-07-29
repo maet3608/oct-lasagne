@@ -61,7 +61,7 @@ class OctPanel(Scatter):
     def zoom(self, pos=(0, 0), zoomin=True):
         """Zoom in or out a given position"""
         c = 1.1 if zoomin else 0.9
-        self.apply_transform(Matrix().scale(c, c, c), post_multiply=False,
+        self.apply_transform(Matrix().scale(c, c, c), post_multiply=True,
                              anchor=self.to_local(*pos))
 
 
