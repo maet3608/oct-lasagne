@@ -61,8 +61,9 @@ class OctPanel(Scatter):
     def zoom(self, pos=(0, 0), zoomin=True):
         """Zoom in or out a given position"""
         c = 1.1 if zoomin else 0.9
-        self.apply_transform(Matrix().scale(c, c, c), post_multiply=True,
+        self.apply_transform(Matrix().scale(c, c, c), post_multiply=False,
                              anchor=self.to_local(*pos))
+
 
     def kv_polyline(self, layeranno):
         """Convert layer annotation to flat point list as required by kivy"""
