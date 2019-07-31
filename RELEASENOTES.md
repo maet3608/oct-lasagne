@@ -1,5 +1,9 @@
 # Release notes
 
+## 1.0.8
+
+- readme updated
+
 ## 1.0.7
 
 - confirmation dialog added when loading backup

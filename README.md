@@ -15,21 +15,17 @@ cd oct-lasagne
 python setup.py install
 ```
  
-If the [Kivy](https://kivy.org) installation fails, install manually 
-following these [installation instructions](https://kivy.org/#download).
-
-### Windows
-
-The following instructions for installing Kivy did NOT work for me:
+If the [Kivy](https://kivy.org) installation fails, install it manually: 
 
 ```
 python -m pip install docutils pygments pypiwin32 kivy.deps.sdl2 kivy.deps.glew
 python -m pip install kivy
 ```
-   
-However, installation of the wheel worked. Download suitable wheel from
-[here](https://kivy.org/downloads/appveyor/kivy/), e.g.
-`Kivy-1.10.1-cp36-cp36m-win_amd64.whl` for Windows 64bit and Python 3.6,
+
+For more details see the [installation instructions](https://kivy.org/#download).
+If this fails as well, try to install the wheel instead. 
+Download a matching wheel from [here](https://kivy.org/downloads/appveyor/kivy/), 
+e.g. `Kivy-2.0.0.dev0-cp37-cp37m-win32.whl` for Windows and Python 3.7,
 and install with 
 
 ```

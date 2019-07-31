@@ -90,7 +90,6 @@ class OctPanel(Scatter):
             self.show_locked_msg()
         elif self.editmode != EDITOFF and self.app.layername:
             self.edit_layer(touch)
-        return True
 
     def edit_layer(self, touch):
         """Edit layer annotation via mouse clicks and modifier buttons"""
